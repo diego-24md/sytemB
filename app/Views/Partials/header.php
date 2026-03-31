@@ -69,11 +69,11 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Sistema de almacén</h6>
-                        <a class="collapse-item" href="<?= base_url('clientes') ?>">Clientes</a>
-                        <a class="collapse-item" href="<?= base_url('proveedores') ?>">Proveedores</a>
-                        <a class="collapse-item" href="<?= base_url('productos') ?>">Productos</a>
-                        <a class="collapse-item" href="<?= base_url('vehiculos') ?>">Vehiculos</a>
+                        <h6 class="collapse-header"></h6>
+                        <a class="collapse-item" href="<?= base_url('') ?>"></a>
+                        <a class="collapse-item" href="<?= base_url('') ?>"></a>
+                        <a class="collapse-item" href="<?= base_url('') ?>"></a>
+                        <a class="collapse-item" href="<?= base_url('') ?>"></a>
                     </div>
                 </div>
             </li>
@@ -88,11 +88,11 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Sistema de almacén:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Diario</a>
-                        <a class="collapse-item" href="utilities-border.html">Semanal</a>
-                        <a class="collapse-item" href="utilities-animation.html">Mensual</a>
-                        <a class="collapse-item" href="utilities-other.html">Personalizado</a>
+                        <h6 class="collapse-header"></h6>
+                        <a class="collapse-item" href="utilities-color.html"></a>
+                        <a class="collapse-item" href="utilities-border.html"></a>
+                        <a class="collapse-item" href="utilities-animation.html"></a>
+                        <a class="collapse-item" href="utilities-other.html"></a>
                     </div>
                 </div>
             </li>
