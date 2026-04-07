@@ -17,3 +17,8 @@ $routes->get('/senati', 'Home::index'); //Primer ejemplo de navegación
 //$routes->verbo('/ruta/', 'Controlador::MetodoAccion');
 //Nota: Es posible crear más de una ruta para una vista
 
+$routes->get('/libros', 'Recurso::index');
+
+//Rutas para el CRUD de personas(alumnos)
+$routes->get('/alumnos', 'Persona::index');
+$routes->post('/alumnos/importar', 'Persona::importar');
