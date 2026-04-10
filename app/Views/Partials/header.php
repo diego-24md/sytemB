@@ -62,7 +62,11 @@
 
             <!-- CATÁLOGO -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCatalogo">
+                <a class="nav-link collapsed" href="#"
+                    data-toggle="collapse"
+                    data-target="#collapseCatalogo"
+                    aria-expanded="false"
+                    aria-controls="collapseCatalogo">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Catálogo</span>
                 </a>
@@ -77,7 +81,11 @@
 
             <!-- USUARIOS -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios">
+                <a class="nav-link collapsed" href="#"
+                    data-toggle="collapse"
+                    data-target="#collapseUsuarios"
+                    aria-expanded="false"
+                    aria-controls="collapseUsuarios">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Usuarios</span>
                 </a>
@@ -92,7 +100,11 @@
 
             <!-- PRÉSTAMOS -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePrestamos">
+                <a class="nav-link collapsed" href="#"
+                    data-toggle="collapse"
+                    data-target="#collapsePrestamos"
+                    aria-expanded="false"
+                    aria-controls="collapsePrestamos">
                     <i class="fas fa-fw fa-book-reader"></i>
                     <span>Préstamos</span>
                 </a>
