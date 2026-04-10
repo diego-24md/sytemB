@@ -29,3 +29,5 @@ $routes->get('buscador', 'Libros::buscador');
 $routes->get('buscar-libros', 'Libros::buscar');
 $routes->get('libro/(:num)', 'Libros::detalle/$1');
 $routes->post('reservar', 'Libros::reservar');
+
+$routes->get('recursos/buscar', 'RecursosController::buscar');
