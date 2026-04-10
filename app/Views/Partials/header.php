@@ -47,7 +47,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="http://localhost:8080/">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -60,20 +60,49 @@
                 Menú Principal
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- CATÁLOGO -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-book"></i>                    
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCatalogo">
+                    <i class="fas fa-fw fa-book"></i>
                     <span>Catálogo</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseCatalogo" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Catálogos</h6>
                         <a class="collapse-item" href="<?= base_url('libros') ?>">Libros</a>
+                        <a class="collapse-item" href="<?= base_url('categorias') ?>">Categorías</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- USUARIOS -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Usuarios</span>
+                </a>
+                <div id="collapseUsuarios" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Usuarios</h6>
                         <a class="collapse-item" href="<?= base_url('alumnos') ?>">Alumnos</a>
-                        <a class="collapse-item" href="<?= base_url('') ?>"></a>
-                        <a class="collapse-item" href="<?= base_url('') ?>"></a>
+                        <a class="collapse-item" href="<?= base_url('docentes') ?>">Docentes</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- PRÉSTAMOS -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePrestamos">
+                    <i class="fas fa-fw fa-book-reader"></i>
+                    <span>Préstamos</span>
+                </a>
+                <div id="collapsePrestamos" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Préstamos</h6>
+                        <a class="collapse-item" href="<?= base_url('prestamos') ?>">Registrar préstamo</a>
+                        <a class="collapse-item" href="<?= base_url('devoluciones') ?>">Devoluciones</a>
+                        <a class="collapse-item" href="<?= base_url('prestamos/activos') ?>">Préstamos activos</a>
+                        <a class="collapse-item" href="<?= base_url('prestamos/historial') ?>">Historial</a>
                     </div>
                 </div>
             </li>
@@ -89,10 +118,10 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header"></h6>
-                        <a class="collapse-item" href="utilities-color.html"></a>
-                        <a class="collapse-item" href="utilities-border.html"></a>
-                        <a class="collapse-item" href="utilities-animation.html"></a>
-                        <a class="collapse-item" href="utilities-other.html"></a>
+                        <a class="collapse-item" href="utilities-color.html">Préstamos pendientes</a>
+                        <a class="collapse-item" href="utilities-border.html">Préstamos vencidos</a>
+                        <a class="collapse-item" href="utilities-animation.html">Ver historial</a>
+                        <a class="collapse-item" href="utilities-other.html">Exportar a PDF</a>
                     </div>
                 </div>
             </li>
@@ -287,8 +316,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="<?= base_url('img/undraw_profile.svg') ?>">
+                                <img class="img-profile rounded-circle" src="<?= base_url('img/undraw_profile.svg') ?>">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
