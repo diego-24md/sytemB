@@ -4,14 +4,12 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class TipoRecursoSeeder extends Seeder
+class TiporecursoSeeder extends Seeder
 {
     public function run()
     {
         $data = [
-            ['tipo' => 'Libro'],
-            ['tipo' => 'Revista'],
-            ['tipo' => 'Tesis'],
+            ['idtiporecurso' => 1, 'nombre' => 'Libro']
         ];
 
         $this->db->table('tiporecurso')->insertBatch($data);

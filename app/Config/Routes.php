@@ -22,3 +22,10 @@ $routes->get('/libros', 'Recurso::index');
 //Rutas para el CRUD de personas(alumnos)
 $routes->get('/alumnos', 'Persona::index');
 $routes->post('/alumnos/importar', 'Persona::importar');
+
+
+//Para el BUSCADOR
+$routes->get('buscador', 'Libros::buscador');
+$routes->get('buscar-libros', 'Libros::buscar');
+$routes->get('libro/(:num)', 'Libros::detalle/$1');
+$routes->post('reservar', 'Libros::reservar');
