@@ -45,11 +45,6 @@
     <!-- Contenido Principal Centrado -->
     <div class="main-content">
 
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-slate-800">Dashboard Biblioteca</h1>
-            <p class="text-slate-500 mt-2">Gestión de Reservas y Disponibilidad</p>
-        </div>
-
         <!-- Estadísticas -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 text-center">
