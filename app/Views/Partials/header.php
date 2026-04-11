@@ -25,6 +25,29 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
+<style>
+    .nav-buscar-libros {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        width: 100%;
+        padding: 0.75rem 1rem;
+
+        color: #fff !important;
+        border-radius: 0.35rem;
+
+        background: linear-gradient(135deg, #4e73df, #224abe);
+
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .nav-buscar-libros:hover {
+        background: linear-gradient(135deg, #5a8dee, #2e59d9);
+        transform: translateX(3px);
+    }
+</style>
 
 <body id="page-top">
 
@@ -50,6 +73,16 @@
                 <a class="nav-link" href="http://localhost:8080/">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('buscador') ?>">
+                    <i class="fas fa-search"></i>
+                    <span>Buscar Libros</span>
+                </a>
             </li>
 
             <!-- Divider -->

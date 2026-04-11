@@ -11,7 +11,6 @@ use CodeIgniter\Router\RouteCollection;
 //es decir www.miweb.com/programador
 
 $routes->get('/', 'Home::dashboard');
-$routes->get('/senati', 'Home::index'); //Primer ejemplo de navegación
 
 //¿Cómo funciona una ruta?
 //$routes->verbo('/ruta/', 'Controlador::MetodoAccion');
@@ -25,9 +24,4 @@ $routes->post('/alumnos/importar', 'Persona::importar');
 
 
 //Para el BUSCADOR
-$routes->get('buscador', 'Libros::buscador');
-$routes->get('buscar-libros', 'Libros::buscar');
-$routes->get('libro/(:num)', 'Libros::detalle/$1');
-$routes->post('reservar', 'Libros::reservar');
-
-$routes->get('recursos/buscar', 'RecursosController::buscar');
+$routes->get('buscador', 'Biblioteca::buscador');

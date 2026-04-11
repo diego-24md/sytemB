@@ -1,234 +1,374 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca - Buscar y Reservar Libros</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Chinchaysuyo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #f5f5f5; color: #111; }
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.93); }
+      to   { opacity: 1; transform: scale(1); }
+    }
 
-    <style>
-        .book-card {
-            transition: all 0.3s ease;
-        }
-        .book-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        .modal {
-            animation: modalPop 0.3s ease-out forwards;
-        }
-        @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-    </style>
+    .header {
+      background: linear-gradient(135deg, #0C447C 0%, #185FA5 60%, #378ADD 100%);
+      padding: 1.4rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: fadeInDown 0.5s ease both;
+    }
+    .header-icon {
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .header-icon:hover { transform: rotate(-8deg) scale(1.1); }
+    .header-title { font-size: 16px; font-weight: 500; color: #fff; letter-spacing: 0.01em; }
+    .header-sub { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+    .search-bar {
+      padding: 1.1rem 1.5rem 0.6rem;
+      display: flex; gap: 8px;
+      background: #fff;
+      animation: fadeInDown 0.5s 0.1s ease both;
+    }
+    .search-wrap { position: relative; flex: 1; }
+    .search-wrap i {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: #888; font-size: 14px;
+      transition: color 0.2s;
+    }
+    .search-wrap input {
+      width: 100%; padding: 0 12px 0 34px;
+      height: 38px;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+      color: #111;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .search-wrap input:focus {
+      border-color: #185FA5;
+      box-shadow: 0 0 0 3px rgba(24,95,165,0.18);
+    }
+    .search-wrap:focus-within i { color: #185FA5; }
+
+    .filters {
+      padding: 0.6rem 1.5rem 1rem;
+      display: flex; gap: 8px; flex-wrap: wrap;
+      background: #fff;
+      border-bottom: 0.5px solid #ddd;
+      animation: fadeInDown 0.5s 0.15s ease both;
+    }
+    .filter-btn {
+      border: 1.5px solid #ccc;
+      background: #fff;
+      color: #555;
+      border-radius: 20px;
+      padding: 5px 13px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .filter-btn:hover {
+      background: #f0f0f0;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(24,95,165,0.10);
+    }
+    .filter-btn:active { transform: scale(0.96); }
+    .filter-btn.active {
+      background: #185FA5;
+      color: #E6F1FB;
+      border-color: #185FA5;
+      box-shadow: 0 2px 10px rgba(24,95,165,0.25);
+    }
+
+    .results-header {
+      padding: 0.6rem 1.5rem;
+      font-size: 12px;
+      color: #888;
+      background: #fff;
+      border-bottom: 0.5px solid #ddd;
+    }
+
+    .book-list { background: #fff; }
+
+    .book-item {
+      display: flex; align-items: flex-start; gap: 13px;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 0.5px solid #eee;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.18s;
+      animation: fadeInUp 0.35s ease both;
+    }
+    .book-item:hover {
+      background: #f7f9fc;
+      transform: translateX(3px);
+    }
+    .book-item:active { transform: scale(0.99); }
+
+    .book-cover {
+      width: 42px; height: 56px;
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+      color: #fff;
+      transition: transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-cover::after {
+      content: '';
+      position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transition: left 0.4s;
+    }
+    .book-item:hover .book-cover        { transform: scale(1.07) rotate(-2deg); }
+    .book-item:hover .book-cover::after { left: 160%; }
+
+    .book-info { flex: 1; min-width: 0; }
+    .book-title  { font-size: 14px; font-weight: 500; color: #111; line-height: 1.4; }
+    .book-author { font-size: 12px; color: #666; margin-top: 2px; }
+    .book-meta   { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+    .badge {
+      font-size: 11px; padding: 2px 9px;
+      border-radius: 10px; font-weight: 400;
+      transition: transform 0.15s;
+    }
+    .badge:hover { transform: scale(1.05); }
+    .badge-cat   { background: #E6F1FB; color: #0C447C; }
+    .badge-avail { background: #EAF3DE; color: #27500A; }
+    .badge-loan  { background: #FAEEDA; color: #633806; }
+    .book-code   { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+    .status-icon { font-size: 13px; padding-top: 4px; transition: transform 0.2s; }
+    .avail-icon  { color: #3B6D11; }
+    .loan-icon   { color: #854F0B; }
+    .book-item:hover .status-icon { transform: scale(1.2); }
+
+    .empty {
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      animation: fadeInUp 0.3s ease both;
+    }
+    .empty i { font-size: 32px; margin-bottom: 1rem; display: block; color: #ccc; }
+
+    .modal-bg {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(4,44,83,0.45);
+      backdrop-filter: blur(2px);
+      z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      border: 0.5px solid #ddd;
+      padding: 1.5rem;
+      max-width: 380px; width: 90%;
+      position: relative;
+      animation: scaleIn 0.25s cubic-bezier(.34,1.4,.64,1) both;
+      box-shadow: 0 8px 40px rgba(4,44,83,0.18);
+    }
+    .modal-close {
+      position: absolute; top: 12px; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: #888; font-size: 16px;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .modal-close:hover { color: #E24B4A; transform: rotate(90deg); }
+    .modal-cover {
+      width: 58px; height: 78px;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; color: #fff;
+      margin-bottom: 1rem;
+      transition: transform 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .modal-cover::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.18), transparent);
+      border-radius: 7px 7px 0 0;
+    }
+    .modal-cover:hover { transform: scale(1.06) rotate(-3deg); }
+    .modal-title  { font-size: 16px; font-weight: 500; color: #111; margin-bottom: 4px; }
+    .modal-author { font-size: 13px; color: #666; margin-bottom: 1rem; }
+    .modal-row {
+      display: flex; gap: 8px; margin-bottom: 6px; font-size: 13px; align-items: center;
+      padding: 5px 8px; border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .modal-row:hover { background: #f7f9fc; }
+    .modal-label { color: #888; min-width: 90px; }
+    .modal-val   { color: #111; }
+    .modal-divider { border: none; border-top: 0.5px solid #eee; margin: 1rem 0; }
+  </style>
 </head>
+<body>
 
-<body class="bg-gray-50 font-sans">
+<div class="header">
+  <div class="header-icon"><i class="fa-solid fa-book-open"></i></div>
+  <div>
+    <div class="header-title">Biblioteca Chinchaysuyo</div>
+    <div class="header-sub">Catalogo de libros</div>
+  </div>
+</div>
 
-    <!-- ==================== BUSCADOR ==================== -->
-    <div class="flex justify-center w-full pt-10">
-        <div class="relative w-2/5">
-            <input id="searchInput" 
-                   type="text" 
-                   placeholder="Buscar por título, autor o género..."
-                   class="w-full bg-white border-2 border-blue-200 focus:border-blue-600 rounded-3xl py-5 pl-14 pr-6 text-lg outline-none transition-all shadow-sm">
-            
-            <span class="absolute left-6 top-1/2 -translate-y-1/2 text-2xl text-blue-500">
-                <i class="fas fa-search"></i>
-            </span>
+<div class="search-bar">
+  <div class="search-wrap">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="searchInput" placeholder="Buscar por titulo, autor o codigo...">
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-cat="all"><i class="fa-solid fa-border-all"></i> Todos</button>
+  <button class="filter-btn" data-cat="Ciencias"><i class="fa-solid fa-flask"></i> Ciencias</button>
+  <button class="filter-btn" data-cat="Literatura"><i class="fa-solid fa-feather-pointed"></i> Literatura</button>
+  <button class="filter-btn" data-cat="Historia"><i class="fa-solid fa-landmark"></i> Historia</button>
+  <button class="filter-btn" data-cat="Matematica"><i class="fa-solid fa-square-root-variable"></i> Matematica</button>
+  <button class="filter-btn" data-cat="Arte"><i class="fa-solid fa-palette"></i> Arte</button>
+</div>
+
+<div class="results-header" id="resultsCount">Cargando...</div>
+<div class="book-list" id="bookList"></div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-cover" id="mCover"></div>
+    <div class="modal-title" id="mTitle"></div>
+    <div class="modal-author" id="mAuthor"></div>
+    <hr class="modal-divider">
+    <div class="modal-row"><span class="modal-label"><i class="fa-solid fa-tag" style="margin-right:6px"></i>Categoria</span><span class="modal-val" id="mCat"></span></div>
+    <div class="modal-row"><span class="modal-label"><i class="fa-solid fa-barcode" style="margin-right:6px"></i>Codigo</span><span class="modal-val" id="mCode"></span></div>
+    <div class="modal-row"><span class="modal-label"><i class="fa-solid fa-calendar" style="margin-right:6px"></i>Año</span><span class="modal-val" id="mYear"></span></div>
+    <div class="modal-row"><span class="modal-label"><i class="fa-solid fa-layer-group" style="margin-right:6px"></i>Ejemplares</span><span class="modal-val" id="mCopies"></span></div>
+    <div class="modal-row"><span class="modal-label"><i class="fa-solid fa-circle-check" style="margin-right:6px"></i>Estado</span><span class="modal-val" id="mStatus"></span></div>
+  </div>
+</div>
+
+<script>
+const BOOKS = [
+  { id:1,  title:"El Principito",                    author:"Antoine de Saint-Exupery",  cat:"Literatura",  code:"LIT-001", year:1943, copies:3, available:true,  color:"#185FA5" },
+  { id:2,  title:"Cien años de soledad",              author:"Gabriel Garcia Marquez",     cat:"Literatura",  code:"LIT-002", year:1967, copies:2, available:false, color:"#185FA5" },
+  { id:3,  title:"Fisica para ciencias e ingenieria", author:"Serway & Jewett",            cat:"Ciencias",    code:"CIE-001", year:2014, copies:4, available:true,  color:"#1D9E75" },
+  { id:4,  title:"Biologia",                          author:"Campbell & Reece",           cat:"Ciencias",    code:"CIE-002", year:2018, copies:3, available:true,  color:"#1D9E75" },
+  { id:5,  title:"Historia del Peru",                 author:"Jorge Basadre Grohmann",     cat:"Historia",    code:"HIS-001", year:1983, copies:2, available:true,  color:"#BA7517" },
+  { id:6,  title:"La conquista del Imperio Inca",     author:"John Hemming",               cat:"Historia",    code:"HIS-002", year:1970, copies:1, available:false, color:"#BA7517" },
+  { id:7,  title:"Algebra lineal y sus aplicaciones", author:"David C. Lay",               cat:"Matematica",  code:"MAT-001", year:2012, copies:5, available:true,  color:"#7F77DD" },
+  { id:8,  title:"Calculo diferencial e integral",    author:"James Stewart",              cat:"Matematica",  code:"MAT-002", year:2016, copies:4, available:true,  color:"#7F77DD" },
+  { id:9,  title:"Historia del arte",                 author:"Ernst Gombrich",             cat:"Arte",        code:"ART-001", year:1950, copies:2, available:true,  color:"#D4537E" },
+  { id:10, title:"Taller de escritura creativa",      author:"Gianni Rodari",              cat:"Literatura",  code:"LIT-003", year:1973, copies:2, available:true,  color:"#185FA5" },
+  { id:11, title:"Quimica general",                   author:"Chang & Goldsby",            cat:"Ciencias",    code:"CIE-003", year:2013, copies:3, available:false, color:"#1D9E75" },
+  { id:12, title:"La ciudad y los perros",            author:"Mario Vargas Llosa",         cat:"Literatura",  code:"LIT-004", year:1963, copies:2, available:true,  color:"#185FA5" },
+];
+
+let activeFilter = "all";
+let searchQuery = "";
+
+function renderBooks() {
+  const list  = document.getElementById("bookList");
+  const count = document.getElementById("resultsCount");
+
+  const filtered = BOOKS.filter(b => {
+    const matchCat = activeFilter === "all" || b.cat === activeFilter;
+    const q = searchQuery.toLowerCase();
+    const matchQ = !q || b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q) || b.code.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+
+  count.textContent = filtered.length === 1 ? "1 resultado" : `${filtered.length} resultados`;
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty"><i class="fa-solid fa-box-open"></i>No se encontraron libros con ese criterio.</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map((b, i) => `
+    <div class="book-item" style="animation-delay:${i * 0.045}s" onclick="openModal(${b.id})">
+      <div class="book-cover" style="background:${b.color}"><i class="fa-solid fa-book"></i></div>
+      <div class="book-info">
+        <div class="book-title">${b.title}</div>
+        <div class="book-author">${b.author}</div>
+        <div class="book-meta">
+          <span class="badge badge-cat">${b.cat}</span>
+          ${b.available
+            ? `<span class="badge badge-avail"><i class="fa-solid fa-circle-check" style="margin-right:4px"></i>Disponible</span>`
+            : `<span class="badge badge-loan"><i class="fa-solid fa-clock" style="margin-right:4px"></i>En prestamo</span>`}
         </div>
+        <div class="book-code">${b.code} &bull; ${b.year}</div>
+      </div>
+      <span class="status-icon ${b.available ? 'avail-icon' : 'loan-icon'}">
+        <i class="fa-solid ${b.available ? 'fa-check' : 'fa-hourglass-half'}"></i>
+      </span>
     </div>
+  `).join("");
+}
 
-    <div class="max-w-screen-2xl mx-auto px-8 py-10">
+function openModal(id) {
+  const b = BOOKS.find(x => x.id === id);
+  document.getElementById("mCover").style.background = b.color;
+  document.getElementById("mCover").innerHTML = `<i class="fa-solid fa-book" style="font-size:24px"></i>`;
+  document.getElementById("mTitle").textContent  = b.title;
+  document.getElementById("mAuthor").textContent = b.author;
+  document.getElementById("mCat").textContent    = b.cat;
+  document.getElementById("mCode").textContent   = b.code;
+  document.getElementById("mYear").textContent   = b.year;
+  document.getElementById("mCopies").textContent = b.copies + " ejemplar(es)";
+  document.getElementById("mStatus").innerHTML   = b.available
+    ? `<span style="color:#3B6D11"><i class="fa-solid fa-circle-check" style="margin-right:4px"></i>Disponible</span>`
+    : `<span style="color:#854F0B"><i class="fa-solid fa-hourglass-half" style="margin-right:4px"></i>En prestamo</span>`;
+  document.getElementById("modalBg").classList.add("open");
+}
 
-        <!-- Hero Banner - Colores Rojo, Amarillo y Azul -->
-        <div class="relative overflow-hidden rounded-3xl p-8 text-white shadow-lg mb-12
-                    bg-gradient-to-r from-blue-600 via-red-500 to-yellow-400">
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white opacity-10 rounded-full"></div>
-            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-black opacity-10 rounded-full"></div>
+document.getElementById("modalClose").onclick = () => document.getElementById("modalBg").classList.remove("open");
+document.getElementById("modalBg").onclick = (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove("open"); };
 
-            <div class="relative flex items-center justify-between">
-                <div>
-                    <h2 class="text-3xl font-bold">📚 Fomentemos la lectura</h2>
-                    <p class="text-white/90 mt-2 max-w-md">
-                        Cada libro es una nueva historia, un nuevo mundo y una nueva oportunidad de aprender.
-                    </p>
-                </div>
-                <div class="hidden md:block text-6xl animate-bounce">
-                    📖✨
-                </div>
-            </div>
-        </div>
+document.getElementById("searchInput").addEventListener("input", e => {
+  searchQuery = e.target.value;
+  renderBooks();
+});
 
-        <!-- Libros Populares -->
-        <div class="mb-12">
-            <h3 class="text-2xl font-semibold mb-6 flex items-center gap-2">
-                <i class="fas fa-fire text-yellow-500"></i>
-                Libros Populares
-            </h3>
-            <div id="popularBooks" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
-        </div>
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeFilter = btn.dataset.cat;
+    renderBooks();
+  });
+});
 
-        <!-- Resultados de Búsqueda -->
-        <div id="searchSection" class="hidden">
-            <h3 class="text-2xl font-semibold mb-6">Resultados de búsqueda</h3>
-            <div id="searchResults" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
-        </div>
-    </div>
-
-    <!-- ==================== MODAL ==================== -->
-    <div id="bookModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4">
-        <div class="modal bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden">
-            <div class="flex">
-                <!-- Portada -->
-                <div id="modalCover" class="w-80 bg-gray-100 flex items-center justify-center text-[180px] border-r"></div>
-
-                <!-- Información -->
-                <div class="flex-1 p-10 overflow-auto">
-                    <button onclick="cerrarModal()" 
-                            class="float-right text-4xl text-gray-400 hover:text-gray-600 leading-none">×</button>
-
-                    <h1 id="modalTitle" class="text-3xl font-bold text-slate-800 pr-12"></h1>
-                    <p id="modalAuthor" class="text-2xl text-slate-600 mt-2"></p>
-
-                    <div class="my-8">
-                        <p class="uppercase text-xs tracking-widest text-gray-500 mb-2">Descripción</p>
-                        <p id="modalDescription" class="text-slate-700 leading-relaxed text-[17px]"></p>
-                    </div>
-
-                    <div class="flex items-center justify-between mt-10">
-                        <div>
-                            <p class="text-sm text-gray-500">Disponibilidad</p>
-                            <p id="modalStatus" class="text-xl font-semibold"></p>
-                        </div>
-
-                        <button onclick="reservarLibro()" 
-                                id="btnReservar"
-                                class="px-12 py-5 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-2xl transition-all flex items-center gap-3">
-                            <i class="fas fa-calendar-check"></i>
-                            Reservar Libro
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Base de datos de libros
-        const libros = [
-            { id: 1, titulo: "Cien Años de Soledad", autor: "Gabriel García Márquez", descripcion: "La icónica novela que narra la historia de la familia Buendía a lo largo de siete generaciones en Macondo.", portada: "🟡", disponible: true },
-            { id: 2, titulo: "Don Quijote de la Mancha", autor: "Miguel de Cervantes", descripcion: "Las aventuras del ingenioso hidalgo Don Quijote y su fiel escudero Sancho Panza.", portada: "🟠", disponible: true },
-            { id: 3, titulo: "1984", autor: "George Orwell", descripcion: "Una distopía aterradora sobre un futuro totalitario y vigilado.", portada: "🔴", disponible: false },
-            { id: 4, titulo: "El Principito", autor: "Antoine de Saint-Exupéry", descripcion: "Un hermoso cuento filosófico sobre la vida, el amor y la amistad.", portada: "🟢", disponible: true },
-            { id: 5, titulo: "Rayuela", autor: "Julio Cortázar", descripcion: "Novela experimental que rompió con las estructuras tradicionales de la narrativa.", portada: "🔵", disponible: true }
-        ];
-
-        // Renderizar libros populares
-        function renderPopularBooks() {
-            const container = document.getElementById('popularBooks');
-            container.innerHTML = '';
-
-            libros.forEach(libro => {
-                const cardHTML = `
-                <div onclick="verLibro(${libro.id})" class="book-card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer">
-                    <div class="h-80 flex items-center justify-center text-8xl bg-gradient-to-br from-gray-50 to-gray-100">
-                        ${libro.portada}
-                    </div>
-                    <div class="p-5">
-                        <h4 class="font-semibold text-lg leading-tight">${libro.titulo}</h4>
-                        <p class="text-sm text-gray-600 mt-1">${libro.autor}</p>
-                        ${!libro.disponible ? `<span class="text-xs mt-3 inline-block px-4 py-1 bg-red-100 text-red-700 rounded-full">No disponible</span>` : ''}
-                    </div>
-                </div>`;
-                container.innerHTML += cardHTML;
-            });
-        }
-
-        // Buscador en tiempo real
-        document.getElementById('searchInput').addEventListener('input', function () {
-            const termino = this.value.toLowerCase().trim();
-            const searchSection = document.getElementById('searchSection');
-            const resultsContainer = document.getElementById('searchResults');
-
-            if (termino === '') {
-                searchSection.classList.add('hidden');
-                return;
-            }
-
-            const filtrados = libros.filter(l =>
-                l.titulo.toLowerCase().includes(termino) || 
-                l.autor.toLowerCase().includes(termino)
-            );
-
-            let html = '';
-
-            if (filtrados.length === 0) {
-                html = `<p class="col-span-full text-center py-20 text-gray-500 text-xl">No se encontraron resultados para "<strong>${this.value}</strong>"</p>`;
-            } else {
-                filtrados.forEach(libro => {
-                    html += `
-                    <div onclick="verLibro(${libro.id})" class="book-card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer">
-                        <div class="h-80 flex items-center justify-center text-8xl bg-gradient-to-br from-gray-50 to-gray-100">
-                            ${libro.portada}
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-semibold text-lg">${libro.titulo}</h4>
-                            <p class="text-sm text-gray-600">${libro.autor}</p>
-                        </div>
-                    </div>`;
-                });
-            }
-
-            resultsContainer.innerHTML = html;
-            searchSection.classList.remove('hidden');
-        });
-
-        // Modal
-        function verLibro(id) {
-            const libro = libros.find(l => l.id === id);
-            if (!libro) return;
-
-            document.getElementById('modalTitle').textContent = libro.titulo;
-            document.getElementById('modalAuthor').textContent = libro.autor;
-            document.getElementById('modalDescription').textContent = libro.descripcion;
-            document.getElementById('modalCover').innerHTML = `<span>${libro.portada}</span>`;
-
-            const statusEl = document.getElementById('modalStatus');
-            statusEl.innerHTML = libro.disponible 
-                ? `<span class="text-blue-600">✅ Disponible</span>` 
-                : `<span class="text-red-600">❌ No disponible</span>`;
-
-            document.getElementById('btnReservar').disabled = !libro.disponible;
-
-            document.getElementById('bookModal').classList.remove('hidden');
-            document.getElementById('bookModal').classList.add('flex');
-        }
-
-        function cerrarModal() {
-            const modal = document.getElementById('bookModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function reservarLibro() {
-            alert("🎉 ¡Reserva realizada con éxito!\n\nEl libro ha sido reservado a tu nombre.\nPuedes recogerlo en la biblioteca dentro de las próximas 48 horas.");
-            cerrarModal();
-        }
-
-        // Inicializar
-        window.onload = function() {
-            renderPopularBooks();
-        };
-    </script>
-
+renderBooks();
+</script>
 </body>
 </html>
-
